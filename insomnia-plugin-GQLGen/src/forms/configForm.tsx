@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { JSONObject } from 'ts-json-object';
-import { GQLGenConfig } from './interfaces/GQLGenConfig';
-import { RequestHeader } from './interfaces/RequestHeader';
+import { GQLGenConfig } from '../models/GQLGenConfig';
+import { RequestHeader } from '../models/RequestHeader';
 
 async function loadConfig(context): Promise<GQLGenConfig | null> {
     const storedConfig = await context.store.getItem('gql-gen:config');
@@ -22,8 +22,8 @@ export class GQLGenConfigForm extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
-            'schemaRequestHeaders': "",
-            'defaultRequestHeaders': ""
+            'schemaRequestHeaders': "{\"exampleName\": \"exampleValue\"}",
+            'defaultRequestHeaders': "{\"exampleName\": \"{{_.exampleEnvVar}}\"}"
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -94,7 +94,7 @@ export class GQLGenConfigForm extends React.Component<any, any> {
 
     private validateJson(jsonString) {
         try {
-            var jsonObj = JSON.parse(jsonString);
+            JSON.parse(jsonString);
         } catch(e) {
             console.error(e);
             return false;
@@ -119,7 +119,7 @@ export class GQLGenConfigForm extends React.Component<any, any> {
                 <div className="form-control form-control--outlined">
                     <label>
                         Schema Query Request Headers:
-                        <input id="schemaRequestHeaders" name="schemaRequestHeaders" type="text" placeholder="[{'name': 'exampleName', 'value': 'exampleValue'}]" value={this.state.schemaRequestHeaders} onChange={this.handleChange} />
+                        <input id="schemaRequestHeaders" name="schemaRequestHeaders" type="text" placeholder="{}" value={this.state.schemaRequestHeaders} onChange={this.handleChange} />
                     </label>
                     <label>
                         Default Request Headers:
