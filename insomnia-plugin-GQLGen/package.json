@@ -1,5 +1,5 @@
 {
-  "name": "insomnia-plugin-GQLGen2",
+  "name": "insomnia-plugin-gql-gen",
   "version": "0.0.1",
   "private": true,
   "main": "dist/index.js",
