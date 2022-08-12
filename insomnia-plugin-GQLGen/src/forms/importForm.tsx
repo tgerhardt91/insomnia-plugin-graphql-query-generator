@@ -17,7 +17,7 @@ export class ImportFromUrlForm extends React.Component<any, any> {
         console.log("In constructor");
 
         this.state = {
-            'importUrl': "",
+            'importUrl': "https://graphqlpokemon.favware.tech/",
             'folderName': "",
             'baseUrl': ""
         };
