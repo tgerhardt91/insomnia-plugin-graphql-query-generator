@@ -1,14 +1,14 @@
 {
-  "name": "insomnia-plugin-gql-gen",
-  "version": "0.0.1",
-  "private": true,
+  "name": "insomnia-plugin-graphql-query-generator",
+  "version": "1.0.0",
+  "private": false,
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "insomnia": {
-    "name": "GQLGen2",
-    "description": ""
+    "name": "insomnia-plugin-graphql-query-generator",
+    "description": "Generate GraphQL resources"
   },
   "scripts": {
     "build:dev": "webpack --config webpack.dev.js",
@@ -41,5 +41,22 @@
     "webpack-cli": "^4.7.2",
     "webpack-merge": "^5.8.0",
     "webpack-node-externals": "^3.0.0"
-  }
+  },
+  "license": "MIT",
+  "description": "## Installation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgerhardt91/insomnia-graphql-gen.git"
+  },
+  "keywords": [
+    "graphql",
+    "gql",
+    "GraphQL",
+    "insomnia"
+  ],
+  "author": "Travis Gerhardt",
+  "bugs": {
+    "url": "https://github.com/tgerhardt91/insomnia-graphql-gen/issues"
+  },
+  "homepage": "https://github.com/tgerhardt91/insomnia-graphql-gen#readme"
 }

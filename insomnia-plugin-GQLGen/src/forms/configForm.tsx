@@ -119,11 +119,11 @@ export class GQLGenConfigForm extends React.Component<any, any> {
                 <div className="form-control form-control--outlined">
                     <label>
                         Schema Query Request Headers:
-                        <input id="schemaRequestHeaders" name="schemaRequestHeaders" type="text" placeholder="{}" value={this.state.schemaRequestHeaders} onChange={this.handleChange} />
+                        <textarea id="schemaRequestHeaders" name="schemaRequestHeaders" rows={15} placeholder="{}" value={this.state.schemaRequestHeaders} onChange={this.handleChange} />
                     </label>
                     <label>
                         Default Request Headers:
-                        <input id="defaultRequestHeaders" name="defaultRequestHeaders" type="text" placeholder="{}" value={this.state.defaultRequestHeaders} onChange={this.handleChange} />
+                        <textarea id="defaultRequestHeaders" name="defaultRequestHeaders" rows={15} placeholder="{}" value={this.state.defaultRequestHeaders} onChange={this.handleChange} />
                     </label>
                 </div>
 
