@@ -13,15 +13,13 @@ function buildUrlFromString(urlString: string) {
 export class ImportFromUrlForm extends React.Component<any, any> {
     constructor(props) {
         super(props);
-        console.log(props);
-        console.log("In constructor");
 
         this.state = {
             'importUrl': "https://graphqlpokemon.favware.tech/",
-            'folderName': "",
-            'baseUrl': ""
+            'folderName': "catch_em_all",
+            'baseUrl': "https://graphqlpokemon.favware.tech/",
+            'baseUrlTouched': false
         };
-        console.log(this.state.baseUrl);
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,7 +47,7 @@ export class ImportFromUrlForm extends React.Component<any, any> {
             var baseUrl = (document.getElementById('baseUrl') as HTMLInputElement).value;
             this.setState({'baseUrl': baseUrl});
 
-            console.log("calling generate: " + this.props.models);
+            console.debug("Generating by URL: " + this.state);
 
             await this.driver.generateGraphQlFromUrl(this.props.context, this.props.models, folderName, baseUrl, await url);
         } catch(e) {
@@ -61,6 +59,23 @@ export class ImportFromUrlForm extends React.Component<any, any> {
 
     private handleChange(event) {
         const { target: { name, value } } = event;
+        if(name === 'importUrl') {
+            if(this.state.baseUrlTouched === false) {
+                this.setState({'baseUrl': value});
+            }
+
+            try {
+                buildUrlFromString(value);
+                event.target.setCustomValidity("");
+            } catch {
+                event.target.setCustomValidity("Invalid URL");
+                event.target.reportValidity();
+            }
+        }
+        else if(name === 'baseUrl') {
+            this.setState({'baseUrlTouched': true});
+        }
+
         this.setState({[name]: value});
     }
 

@@ -43,7 +43,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "license": "MIT",
-  "description": "## Installation",
+  "description": "https://github.com/tgerhardt91/insomnia-graphql-gen#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tgerhardt91/insomnia-graphql-gen.git"

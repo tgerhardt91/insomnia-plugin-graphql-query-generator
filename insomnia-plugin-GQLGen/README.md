@@ -23,8 +23,8 @@ GraphQL generation largely borrowed and modified from James Gatz's  graphql code
 
 TODO:
 - [x] Remove '/graphql' from base url generation
-- [] Make base URL auto populate from import URL if empty
-- [] Input validation on import form
+- [x] Make base URL auto populate from import URL if empty
+- [x] Input validation on import form
 - [] Look into variable data types
 - [] Schema import
 - [] Look into env var support for input

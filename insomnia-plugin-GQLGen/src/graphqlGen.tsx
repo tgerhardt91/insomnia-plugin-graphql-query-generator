@@ -253,7 +253,8 @@ function insomniaIdGenerator() {
     let variablesJson = new JSONObject();
   
     variableNodes.forEach(element => {
-      variablesJson[element.variable.name.value] = ""
+      console.log(element);
+      variablesJson[element.variable.name.value] = "";
     });
   
     return JSON.stringify(variablesJson);
