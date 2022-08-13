@@ -25,7 +25,8 @@ TODO:
 - [x] Remove '/graphql' from base url generation
 - [x] Make base URL auto populate from import URL if empty
 - [x] Input validation on import form
-- [] Look into variable data types
+- [x] Support different variable data types
+- [x] Support list variables
 - [] Schema import
 - [] Look into env var support for input
-- [] Loading symbol while importing
+- [] Loading symbol while importing + make submit buttons more responsive
