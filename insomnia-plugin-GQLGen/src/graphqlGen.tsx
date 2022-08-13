@@ -10,6 +10,9 @@ import {
   IntrospectionQuery,
   OperationTypeNode,
   VariableDefinitionNode,
+  NamedTypeNode,
+  TypeNode,
+  Kind,
 } from "graphql";
 
 import {
@@ -253,11 +256,27 @@ function insomniaIdGenerator() {
     let variablesJson = new JSONObject();
   
     variableNodes.forEach(element => {
-      console.log(element);
-      variablesJson[element.variable.name.value] = "";
+      variablesJson[element.variable.name.value] = getVariableDefaultValue(element.type)
     });
   
     return JSON.stringify(variablesJson);
+  }
+
+  function getVariableDefaultValue(variableNode: TypeNode) {
+    if(variableNode.kind != Kind.NAMED_TYPE) {
+      return "";
+    }
+
+    switch(variableNode.name.value) {
+      case 'Int':
+        return 0;
+      case 'Float':
+        return 0;
+      case 'Boolean':
+        return false;
+      default:
+        return "";
+    }
   }
 
   function getInsomniaResourcesFromOperations(

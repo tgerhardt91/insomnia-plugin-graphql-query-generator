@@ -11,7 +11,6 @@ const workspaceActions = [
     label: `${pluginName}: From URL`,
     action(context, models) {
       const root = document.createElement('div');
-      console.log(context);
       ReactDom.render(<ImportFromUrlForm context={context} models={models}/>, root);
       context.app.dialog('Import GraphQL From URL', root, {
           skinny: true,
