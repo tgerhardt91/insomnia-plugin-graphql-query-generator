@@ -25,7 +25,7 @@ import {
   JSONObject
 } from "ts-json-object";
 
-let pluginName = `GraphQL Codegen`;
+let pluginName = `GraphQL Query Generator`;
 
 function chunk<T>(arr: T[], size: number) {
   let chunks: T[][] = [];
@@ -296,7 +296,7 @@ function insomniaIdGenerator() {
         ],
         name: operation.name?.value,
         method: "POST",
-        url: name + "/graphql",
+        url: name,
         parentId: requestGroup._id
       };
     }

@@ -22,8 +22,10 @@
 GraphQL generation largely borrowed and modified from James Gatz's  graphql codegen plugin [github](https://github.com/gatzjames/insomnia-plugin-graphql-codegen-import)
 
 TODO:
+- [x] Remove '/graphql' from base url generation
 - [] Make base URL auto populate from import URL if empty
 - [] Input validation on import form
 - [] Look into variable data types
 - [] Schema import
 - [] Look into env var support for input
+- [] Loading symbol while importing

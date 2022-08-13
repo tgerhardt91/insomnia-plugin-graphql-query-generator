@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { ImportFromUrlForm } from "./forms/importForm";
 
-let pluginName = `GraphQL-Gen`;
+let pluginName = `GraphQL Query Generator`;
 
 const workspaceActions = [
   {
