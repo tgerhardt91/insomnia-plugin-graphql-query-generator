@@ -12,7 +12,7 @@ import {
   VariableDefinitionNode,
   NamedTypeNode,
   TypeNode,
-  Kind,
+  Kind
 } from "graphql";
 
 import {
@@ -263,11 +263,17 @@ function insomniaIdGenerator() {
   }
 
   function getVariableDefaultValue(variableNode: TypeNode) {
-    if(variableNode.kind != Kind.NAMED_TYPE) {
-      return "";
+    var typeName = "";
+
+    if(variableNode.kind === Kind.NON_NULL_TYPE && variableNode.type.kind === Kind.NAMED_TYPE) {
+        var innerTypeNode = variableNode.type as NamedTypeNode;
+        typeName = innerTypeNode.name.value;
+    }
+    else if(variableNode.kind === Kind.NAMED_TYPE) {
+      typeName = variableNode.name.value;
     }
 
-    switch(variableNode.name.value) {
+    switch(typeName) {
       case 'Int':
         return 0;
       case 'Float':

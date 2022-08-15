@@ -26,7 +26,8 @@ TODO:
 - [x] Make base URL auto populate from import URL if empty
 - [x] Input validation on import form
 - [x] Support different variable data types
-- [x] Support list variables
+- [] Support list variables
 - [] Schema import
 - [] Look into env var support for input
 - [] Loading symbol while importing + make submit buttons more responsive
+- [] Support Object variables
