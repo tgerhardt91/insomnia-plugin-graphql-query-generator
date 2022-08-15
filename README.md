@@ -1,1 +1,0 @@
-graphql-gen-plugin
