@@ -9,6 +9,7 @@ let pluginName = `GraphQL Query Generator`;
 const workspaceActions = [
   {
     label: `${pluginName}: From URL`,
+    icon: 'fa-solid fa-download',
     action(context, models) {
       const root = document.createElement('div');
       ReactDom.render(<ImportFromUrlForm context={context} models={models}/>, root);
@@ -22,6 +23,7 @@ const workspaceActions = [
   },
   {
     label: `${pluginName}: Settings`,
+    icon: 'fa-solid fa-gears',
     action(context, models) {
       const root = document.createElement('div');
       ReactDom.render(<GQLGenConfigForm context={context}/>, root);

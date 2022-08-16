@@ -1,14 +1,18 @@
 {
   "name": "insomnia-plugin-graphql-query-generator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
   "main": "dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "insomnia": {
     "name": "insomnia-plugin-graphql-query-generator",
-    "description": "Generate GraphQL resources"
+    "description": "Generate GraphQL resources",
+    "images": {
+      "icon": "assets/graph_import.svg"
+    }
   },
   "scripts": {
     "build:dev": "webpack --config webpack.dev.js",
