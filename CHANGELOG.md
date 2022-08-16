@@ -16,3 +16,8 @@
 
 - Additions:
     - adds missing typescript dependency
+
+## 1.0.5 - Release Date: 08/16/22
+
+- Additions:
+    - Icons for dropdown actions and insomnia plugin page
