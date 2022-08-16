@@ -6,3 +6,13 @@
     - import from URL form will auto-populate base url with import url
     - base URL no longer auto-appends /graphql
     - todo in readme
+
+## 1.0.2 - Release Date: 08/15/22
+
+- Additions:
+    - copied README into dir for npm
+
+## 1.0.3 - Release Date: 08/16/22
+
+- Additions:
+    - adds missing typescript dependency
