@@ -3,7 +3,6 @@
 const path = require("path");
 const webpack = require("webpack");
 
-const WebpackNodeExternals = require("webpack-node-externals");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 
@@ -51,9 +50,6 @@ module.exports = {
                     { test: /\.ts$/i, loader: "ts-loader" }
                 ]
             },
-            externals: [WebpackNodeExternals({
-                allowlist: []
-            })],
             plugins: [
                 new CleanWebpackPlugin({
                     dry: false,

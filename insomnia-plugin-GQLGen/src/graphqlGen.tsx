@@ -160,12 +160,10 @@ async function fetchGraphQLSchema(url: URL, context: Context): Promise<GraphQLSc
   }
 
   async function getSchemaRequestHeaders(context: Context): Promise <RequestHeader[]> {
-    var configJson: GQLGenConfig;
-
-    const storedConfig = await context.store.getItem('gql-gen:config');
+    const storedHeaders = await context.store.getItem('gql-gen:schemaRequestHeaders');
     try {
-        configJson = JSON.parse(storedConfig);
-        return configJson.schemaRequestHeaders;
+        console.log(storedHeaders);
+        return JSON.parse(storedHeaders);
     } catch(e) {
         console.error("Loading config failed: ", e);
         return [];
@@ -177,12 +175,10 @@ async function fetchGraphQLSchema(url: URL, context: Context): Promise<GraphQLSc
   //*******
 
   async function getDefaultRequestHeaders(context: Context): Promise <RequestHeader[]> {
-    var configJson: GQLGenConfig;
-
-    const storedConfig = await context.store.getItem('gql-gen:config');
+    const storedHeaders = await context.store.getItem('gql-gen:defaultRequestHeaders');
     try {
-        configJson = JSON.parse(storedConfig);
-        return configJson.defaultRequestHeaders;
+        console.log(storedHeaders);
+        return JSON.parse(storedHeaders);
     } catch(e) {
         console.error("Loading config failed: ", e);
         return [];

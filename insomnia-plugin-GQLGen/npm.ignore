@@ -1,0 +1,6 @@
+/src
+/.github
+/docs
+.gitignore
+package-lock.json
+tsconfig.json
