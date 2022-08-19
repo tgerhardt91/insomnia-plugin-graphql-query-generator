@@ -95,8 +95,8 @@ const ImportInput: React.FC<IImportProps> = ({ models, context }) => {
           </label>
         </div>
         <div css={actionsContainerStyle}>
-          <Button label='Cancel' closeModal />
-          <Button label='Submit' onClick={handleSave} closeModal />
+          <Button label='Cancel' closeModal disable={false}/>
+          <Button label='Submit' onClick={handleSave} closeModal disable={false}/>
         </div>
       </form>
     );

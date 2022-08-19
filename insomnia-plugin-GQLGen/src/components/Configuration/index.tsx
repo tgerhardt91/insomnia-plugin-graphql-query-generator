@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback, ChangeEvent, SetStateAction } from 'react';
+import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import Button from '../Button';
 import { RequestHeader } from '../../models/RequestHeader';
 import { actionsContainerStyle } from './styles';
 import { JSONObject } from 'ts-json-object';
-import { EvalSourceMapDevToolPlugin } from 'webpack';
 
 interface IConfigurationProps {
     insomniaContext: IInsomniaContext
@@ -39,6 +38,9 @@ async function loadRequestHeaders(context: IInsomniaContext, storeKey: string): 
 const Configuration: React.FC<IConfigurationProps> = ({ insomniaContext }) => {
   const [schemaRequestHeaders, setSchemaRequestHeaders] = useState<string | null>('');
   const [defaultRequestHeaders, setDefaultRequestHeaders] = useState<string | null>('');
+  const [schemaHeaderJsonIsValid, setSchemaHeaderJsonIsValid] = useState<boolean>(true);
+  const [defaultHeaderJsonIsValid, setDefaultHeaderJsonIsValid] = useState<boolean>(true);
+  const [disableSave, setDisableSave] = useState<boolean>(false);
 
 useEffect(() => {
   async function load() {
@@ -58,12 +60,23 @@ useEffect(() => {
   load();
 }, []);
 
+useEffect(() => {
+  if(schemaHeaderJsonIsValid && defaultHeaderJsonIsValid) {
+    setDisableSave(false);
+  }
+  else {
+    setDisableSave(true);
+  }
+}, [schemaHeaderJsonIsValid, defaultHeaderJsonIsValid]);
+
 const handleSchemaHeadersChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
   if(isJsonValid(event.target.value) === false) {
+    setSchemaHeaderJsonIsValid(false);
     event.target.setCustomValidity("Invalid JSON");
     event.target.reportValidity();
   }
   else {
+    setSchemaHeaderJsonIsValid(true);
     event.target.setCustomValidity("");
   }
   setSchemaRequestHeaders(event.target.value);
@@ -71,10 +84,12 @@ const handleSchemaHeadersChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
 
 const handleDefaultHeadersChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
   if(isJsonValid(event.target.value) === false) {
+    setDefaultHeaderJsonIsValid(false);
     event.target.setCustomValidity("Invalid JSON");
     event.target.reportValidity();
   }
   else {
+    setDefaultHeaderJsonIsValid(true);
     event.target.setCustomValidity("");
   }
   setDefaultRequestHeaders(event.target.value);
@@ -97,25 +112,37 @@ return (
       <label>
         Schema Query Request Headers
       <textarea
+        id='schemaHeaderTextArea'
         value={schemaRequestHeaders}
         rows={10}
-        placeholder="{}"
+        defaultValue="{}"
         onChange={event => handleSchemaHeadersChange(event)}
       />
       </label>
       <label>
         Default Query Request Headers
       <textarea
+        id='defaultHeaderTextArea'
         value={defaultRequestHeaders}
         rows={10}
-        placeholder="{}"
+        defaultValue="{}"
         onChange={event => handleDefaultHeadersChange(event)}
       />
       </label>
     </div>
     <div css={actionsContainerStyle}>
-      <Button label='Cancel' closeModal />
-      <Button label='Save' onClick={handleSave} closeModal />
+      <Button 
+        label='Cancel' 
+        closeModal 
+        disable={false}
+      />
+      <Button 
+        id='saveButton'
+        label='Save' 
+        onClick={handleSave}
+        closeModal 
+        disable={disableSave}
+        />
     </div>
   </form>
 );

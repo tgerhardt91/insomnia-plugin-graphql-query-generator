@@ -148,9 +148,11 @@ async function fetchGraphQLSchema(url: URL, context: Context): Promise<GraphQLSc
       );
 
       var headers = await getSchemaRequestHeaders(context);
-      headers.forEach(function (header) {
-        request.setHeader(header.name, header.value);
-      }); 
+      if(headers && headers.length) {
+        headers.forEach(function (header) {
+          request.setHeader(header.name, header.value);
+        }); 
+      }
   
       request.on("error", reject);
       request.write(JSON.stringify({ query: introspectionQuery }));
