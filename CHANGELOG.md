@@ -26,3 +26,8 @@
 
 - Changes:
     - Changed React code to be more performant and solve crash issues when running latest version of insomnia
+
+## 1.1.2 - Release Date: 08/19/22
+
+- Changes:
+    - Save button on settings component will be disabled unless json is valid
