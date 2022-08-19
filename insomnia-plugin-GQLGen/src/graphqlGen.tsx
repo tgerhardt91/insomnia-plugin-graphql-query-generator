@@ -1,5 +1,4 @@
 import { buildOperationNodeForField } from "@graphql-tools/utils";
-import { GQLGenConfig } from "./models/GQLGenConfig";
 import { RequestHeader } from "./models/RequestHeader";
 import {
   buildClientSchema,
@@ -165,7 +164,7 @@ async function fetchGraphQLSchema(url: URL, context: Context): Promise<GraphQLSc
         console.log(storedHeaders);
         return JSON.parse(storedHeaders);
     } catch(e) {
-        console.error("Loading config failed: ", e);
+        console.error("Loading schema headers failed: ", e);
         return [];
     }
   }
@@ -180,7 +179,7 @@ async function fetchGraphQLSchema(url: URL, context: Context): Promise<GraphQLSc
         console.log(storedHeaders);
         return JSON.parse(storedHeaders);
     } catch(e) {
-        console.error("Loading config failed: ", e);
+        console.error("Loading request headers failed: ", e);
         return [];
     }
   }

@@ -2,7 +2,7 @@ interface IInsomniaApp {
   dialog(title: string, html: HTMLElement): void;
 }
 
-interface IInsomniaStore2 {
+interface IInsomniaStore {
   getItem(key: string): Promise<string | null>;
   setItem(key: string, value: string): Promise<void>;
 }
@@ -27,7 +27,7 @@ interface IInsomniaData {
 
 interface IInsomniaContext {
   app: IInsomniaApp;
-  store: IInsomniaStore2;
+  store: IInsomniaStore;
   data: IInsomniaData;
 }
 
