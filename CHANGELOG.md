@@ -21,3 +21,8 @@
 
 - Additions:
     - Icons for dropdown actions and insomnia plugin page
+
+## 1.1.0 - Release Date: 08/19/22
+
+- Changes:
+    - Changed React code to be more performant and solve crash issues when running latest version of insomnia
