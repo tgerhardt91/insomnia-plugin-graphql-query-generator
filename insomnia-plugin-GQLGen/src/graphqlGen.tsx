@@ -20,9 +20,6 @@ import {
   Request,
   RequestGroup} from "insomnia-plugin";
 
-import https from "https";
-import http from "http";
-
 import {
   JSONObject
 } from "ts-json-object";
@@ -57,7 +54,7 @@ export class GraphQlGenDrivers {
         }
       } catch (error) {
         if (error instanceof Error) {
-          console.log(`[ERROR] [${pluginName}: From schema] [${error}]`);
+          console.log(`[ERROR] [${pluginName}: From schema] [${error}]` + error.stack);
           context.app.alert(
             "Error while importing GraphQL operations",
             error.message
@@ -69,19 +66,28 @@ export class GraphQlGenDrivers {
 public async generateGraphQlFromUrl(context, models, folderName: string, baseUrl: string, importUrl: URL) {
     try { 
         if (importUrl) {
-          let schema = await fetchGraphQLSchema(importUrl, context);
-          let operations = await generateOperations(schema);
+          getSchema(
+            importUrl, 
+
+            ////callback function for getSchema response
+            async function(xhttp: XMLHttpRequest) {
+            console.log("Schema string: " + xhttp.responseText);
+            let schema = await buildGraphQLSchema(xhttp.responseText);
+            let operations = await generateOperations(schema);
   
-          await importToCurrentWorkspace(models, operations, baseUrl, folderName, context);
-  
-          context.app.alert(
-            `${pluginName}: Import from URL`,
-            "Successfully imported GraphQL operations from URL"
-          );
+            await importToCurrentWorkspace(models, operations, baseUrl, folderName, context);
+    
+            context.app.alert(
+              `${pluginName}: Import from URL`,
+              "Successfully imported GraphQL operations from URL"
+            );
+          }, 
+          ////
+          context);
         }
       } catch (error) {
         if (error instanceof Error) {
-          console.log(`[ERROR] [${pluginName}: From URL] [${error}]`);
+          console.log(`[ERROR] [${pluginName}: From URL] [${error}]` + error.stack);
           context.app.alert(
             "Error while importing GraphQL operations",
             error.message
@@ -104,60 +110,37 @@ async function buildGraphQLSchema(schemaString: string): Promise<GraphQLSchema> 
     });
   }
 
-async function fetchGraphQLSchema(url: URL, context: Context): Promise<GraphQLSchema> {
-    let introspectionQuery = getIntrospectionQuery();
-  
-    return new Promise(async (resolve, reject) => {
-      let { request: httpRequest, Agent } =
-        url.protocol === "https:" ? https : http;
-  
-      let request = httpRequest(
-        {
-          method: "POST",
-          protocol: url.protocol,
-          host: url.host,
-          path: url.pathname,
-          pathname: url.pathname,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          agent: new Agent({
-            rejectUnauthorized: false
-          })
-        },
-        (response) => {
-          if (
-            response.statusMessage === "OK" ||
-            response.statusCode?.toString().startsWith("2")
-          ) {
-            let data = "";
-            response.on("data", (chunk) => {
-              data += chunk;
-            });
-            response.on("end", () => {
-              let introspectionResult: IntrospectionQuery =
-                JSON.parse(data)?.data;
-              let schema = buildClientSchema(introspectionResult);
-              resolve(schema);
-            });
-          }
+  async function getSchema(url: URL, callback: Function, context: Context) {
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
 
-          response.on("error", reject);
+    // When state is done, execute callback function on 2**, pop error message on anything else
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === this.DONE) {
+        if(this.status?.toString().startsWith("2")) {
+          console.log("Schema request successful");
+          callback(this);
         }
-      );
-
-      var headers = await getSchemaRequestHeaders(context);
-      if(headers && headers.length) {
-        headers.forEach(function (header) {
-          request.setHeader(header.name, header.value);
-        }); 
+        else {
+          context.app.alert(
+            `Error querying graphql schema`,
+            this.status + " " + this.statusText 
+          )}
       }
-  
-      request.on("error", reject);
-      request.write(JSON.stringify({ query: introspectionQuery }));
-      request.end();
     });
+
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    var headers = await getSchemaRequestHeaders(context);
+    if(headers && headers.length) {
+      headers.forEach(function (header) {
+        xhr.setRequestHeader(header.name, header.value);
+      }); 
+    }
+
+    var introspectionQuery = getIntrospectionQuery();
+    xhr.send(JSON.stringify({query: introspectionQuery }));
   }
 
   async function getSchemaRequestHeaders(context: Context): Promise <RequestHeader[]> {
