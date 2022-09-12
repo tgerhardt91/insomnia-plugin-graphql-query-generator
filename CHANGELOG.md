@@ -1,4 +1,9 @@
-## 1.0.1 - Release Date: 08/15/22
+## 1.1.4 - Release Date: 09/12/22
+
+- Changes
+  -Introspection query uses XMLHttp
+
+## 1.0.4
 
 - Additions:
     - default variables for int, float and boolean variables
