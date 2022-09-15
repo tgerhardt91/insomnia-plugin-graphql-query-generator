@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import Button from '../Button';
 import { RequestHeader } from '../../models/RequestHeader';
-import { actionsContainerStyle } from './styles';
+import { actionsContainerStyle, dualInputStyle, flex1Style, leftInputStyle, rightInputStyle } from './styles';
 import { JSONObject } from 'ts-json-object';
+import { ConfigEntry } from './header';
+import { v4 as uuidV4 } from 'uuid'
 
 interface IConfigurationProps {
     insomniaContext: IInsomniaContext
@@ -36,6 +38,9 @@ async function loadRequestHeaders(context: IInsomniaContext, storeKey: string): 
 } 
 
 const Configuration: React.FC<IConfigurationProps> = ({ insomniaContext }) => {
+
+
+  const [schemaHeaders, setSchemaHeaders] = useState<RequestHeader[]>([]);
   const [schemaRequestHeaders, setSchemaRequestHeaders] = useState<string | null>('');
   const [defaultRequestHeaders, setDefaultRequestHeaders] = useState<string | null>('');
   const [schemaHeaderJsonIsValid, setSchemaHeaderJsonIsValid] = useState<boolean>(true);
@@ -44,6 +49,17 @@ const Configuration: React.FC<IConfigurationProps> = ({ insomniaContext }) => {
 
 useEffect(() => {
   async function load() {
+    console.log('loading schema headers');
+    var requestHeaders = await loadRequestHeaders(insomniaContext, 'gql-gen:schemaRequestHeaders');
+
+    requestHeaders.forEach(header => {
+      schemaHeaders.push(header);
+    });
+
+    schemaHeaders.forEach(item => {
+      console.log("saved header " + item.name + " " + item.value);
+    });
+
     let schemaHeadersJson = new JSONObject();
     (await loadRequestHeaders(insomniaContext, 'gql-gen:schemaRequestHeaders')).forEach(header => {
       schemaHeadersJson[header.name] = header.value;
@@ -57,7 +73,9 @@ useEffect(() => {
     setSchemaRequestHeaders(JSON.stringify(schemaHeadersJson));
     setDefaultRequestHeaders(JSON.stringify(defaultHeadersJson));
   }
+
   load();
+
 }, []);
 
 useEffect(() => {
@@ -69,17 +87,20 @@ useEffect(() => {
   }
 }, [schemaHeaderJsonIsValid, defaultHeaderJsonIsValid]);
 
-const handleSchemaHeadersChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-  if(isJsonValid(event.target.value) === false) {
-    setSchemaHeaderJsonIsValid(false);
-    event.target.setCustomValidity("Invalid JSON");
-    event.target.reportValidity();
-  }
-  else {
-    setSchemaHeaderJsonIsValid(true);
-    event.target.setCustomValidity("");
-  }
-  setSchemaRequestHeaders(event.target.value);
+const handleSchemaHeaderNameChange = (event: ChangeEvent<HTMLTextAreaElement>, id: string) => {
+  let headers = schemaHeaders.map(header => { return { ...header }} );
+  let indexToUpdate = headers.map(header => header.id).indexOf(id);
+  headers[indexToUpdate].name = event.target.value;
+
+  setSchemaHeaders(headers);
+}
+
+const handleSchemaHeaderValueChange = (event: ChangeEvent<HTMLTextAreaElement>, id: string) => {
+  let headers = schemaHeaders.map(header => { return { ...header }} );
+  let indexToUpdate = headers.map(header => header.id).indexOf(id);
+  headers[indexToUpdate].value = event.target.value;
+
+  setSchemaHeaders(headers);
 }
 
 const handleDefaultHeadersChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -95,46 +116,90 @@ const handleDefaultHeadersChange = (event: ChangeEvent<HTMLTextAreaElement>) => 
   setDefaultRequestHeaders(event.target.value);
 }
 
+const handleAddNewSchemaHeader = () => {
+  console.log("adding new header");
+  var newHeader = new RequestHeader("Header Name", "Header Value");
+  let updatedHeaders = schemaHeaders.map(header => { return header });
+  updatedHeaders.push(newHeader);
+  setSchemaHeaders(updatedHeaders);
+
+  schemaHeaders.forEach(element => {
+    console.log(element.name);
+  });
+}
+
+const handleRemoveSchemaHeader = (headerId: string) => {
+  console.log("Removing header with id: " + headerId);
+
+  let headers = schemaHeaders.map(header => { return header });
+
+  let indexToRemove = headers.map(header => header.id).indexOf(headerId);
+  headers.splice(indexToRemove, 1);
+
+  setSchemaHeaders(headers);
+}
+
 const handleSave = useCallback(() => {
   async function execute() {
-    var schemaRequestHeaderObjs = buildRequestHeadersFromJson(JSON.parse(schemaRequestHeaders));
     var defaultRequestHeaderObjs = buildRequestHeadersFromJson(JSON.parse(defaultRequestHeaders));
 
-    await insomniaContext.store.setItem('gql-gen:schemaRequestHeaders', JSON.stringify(schemaRequestHeaderObjs));
+    await insomniaContext.store.setItem('gql-gen:schemaRequestHeaders', JSON.stringify(schemaHeaders));
     await insomniaContext.store.setItem('gql-gen:defaultRequestHeaders', JSON.stringify(defaultRequestHeaderObjs));
   }
   execute();
-}, [schemaRequestHeaders, defaultRequestHeaders]);
+}, [schemaHeaders, defaultRequestHeaders]);
 
 return (
   <form>
     <div className="form-control form-control--outlined">
-      <label>
-        Schema Query Request Headers
-      <textarea
-        id='schemaHeaderTextArea'
-        value={schemaRequestHeaders}
-        rows={10}
-        defaultValue="{}"
-        onChange={event => handleSchemaHeadersChange(event)}
-      />
-      </label>
-      <label>
-        Default Query Request Headers
-      <textarea
-        id='defaultHeaderTextArea'
-        value={defaultRequestHeaders}
-        rows={10}
-        defaultValue="{}"
-        onChange={event => handleDefaultHeadersChange(event)}
-      />
-      </label>
+        <div css={dualInputStyle}>
+          <div css ={leftInputStyle}>
+            <label>
+            Header Name
+            </label>
+          </div>
+          <div css ={rightInputStyle}>
+            Header Value
+          </div>
+          <div css ={flex1Style}>
+          </div>
+        </div>
+        {schemaHeaders.map(schemaHeader => {
+          return (
+          <div>
+           <div css={dualInputStyle}>
+            <div css={leftInputStyle}>
+            <textarea
+              id={"headername" + schemaHeader.id}
+              value={schemaHeader.name}
+              rows={2}
+              onChange={(e) => handleSchemaHeaderNameChange(e, schemaHeader.id)}
+            />
+            </div>
+            <div css={rightInputStyle}>
+            <textarea
+              id={"headervalue" + schemaHeader.id}
+              value={schemaHeader.value}
+              rows={2}
+              onChange={(e) => handleSchemaHeaderValueChange(e, schemaHeader.id)}
+            />
+            </div>
+        </div>
+          <Button
+            id={'deleteButton' + schemaHeader.id}
+            label='Delete' 
+            onClick={() => handleRemoveSchemaHeader(schemaHeader.id)}
+            disable={false}
+            />
+          <br></br>
+          </div>
+        )})}
     </div>
     <div css={actionsContainerStyle}>
       <Button 
-        label='Cancel' 
-        closeModal 
+        label='Add New'  
         disable={false}
+        onClick={handleAddNewSchemaHeader}
       />
       <Button 
         id='saveButton'
@@ -144,6 +209,9 @@ return (
         disable={disableSave}
         />
     </div>
+    {/* <ul>
+          {renderSchemaHeaders()}
+        </ul> */}
   </form>
 );
 };

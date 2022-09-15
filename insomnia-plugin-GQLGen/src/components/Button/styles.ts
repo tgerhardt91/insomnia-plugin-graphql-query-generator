@@ -8,6 +8,7 @@ export const buttonStyle = css`
   border-radius: 3px;
   margin: 5px 0;
   color: #333333;
+  align-self: end;
 
   &:hover {
     background-color: #fff;

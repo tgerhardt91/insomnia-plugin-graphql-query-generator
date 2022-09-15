@@ -19,13 +19,14 @@
     "build": "babel src --extensions \".ts,.js,.tsx\" --out-dir dist"
   },
   "dependencies": {
-    "axios": "^0.21.1",
     "@emotion/core": "^10.0.35",
     "@graphql-codegen/core": "^2.6.2",
     "@graphql-tools/utils": "^8.10.0",
+    "axios": "^0.21.1",
     "graphql": "^16.6.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^18.0.20",
+    "react-dom": "^18.0.6",
+    "react-native": "^0.70.1",
     "ts-json-object": "^0.4.0",
     "uuid": "^8.3.2"
   },
@@ -38,8 +39,8 @@
     "@babel/preset-react": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
     "@emotion/babel-preset-css-prop": "^10.0.27",
-    "@types/react": "^16.9.41",
-    "@types/react-dom": "^16.9.8",
+    "@types/react": "^18.0.20",
+    "@types/react-dom": "^18.0.6",
     "@types/uuid": "^8.3.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "esbuild": "^0.13.15",
